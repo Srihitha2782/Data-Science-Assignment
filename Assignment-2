@@ -1,0 +1,32 @@
+library(tidyverse)
+library(grid)
+library(gridExtra)
+library(forcats)
+library(modelr)
+library(caret)
+library(kknn)
+
+iris <- as_tibble(iris)
+summary(iris)
+
+sapply(iris,class)
+map(iris,sd)
+map(iris,mean)
+
+# CREATE A FUNCTION
+na_data <- function(x){
+  sum(is.na(x))/length(x)*100
+}
+#WHY DOES IT NEED THE /LENGTH*100??
+na_data2 <- function(x){
+  sum(is.na(x))
+}
+#loop it over our dataset
+apply(long_iris,2,na_data2)
+
+long_iris <- iris %>% 
+  gather(key= 'part', value = 'value', Sepal.Length, Sepal.Width, Petal.Length, Petal.Width) %>%
+  separate(part,c('part','measure'), sep = '\\.')
+  
+  factors <- c('part','measure')
+long_iris[factors] <- lapply(long_iris[factors],as.factor)
